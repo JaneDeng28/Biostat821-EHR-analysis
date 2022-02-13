@@ -1,11 +1,11 @@
 from datetime import date, timedelta, datetime
 from typing import Union
 
-"""Data Parsing"""
+    """Data Parsing"""
 def parse_data(filename):
-    result = []
-    with open(filename, 'r') as f:
-        lines = f.readlines()
+    result = [] # O(1)
+    with open(filename, 'r') as f: # O(1)
+        lines = f.readlines() # O(1)
         headers = lines[0].encode("utf-8").decode("utf-8-sig").strip().split()  # O(1)
         for line in lines[1:]:  # N - 1, start from 2 nd line
             d = dict()  # O(1)
@@ -32,11 +32,13 @@ def num_older_than(age_old:Union[int, float], dataname):
 # 5 * N -> 0(N)
 
 def sick_patients(lab, gt_lt, value, lab_name):
-    stat = lambda lab_value, ref_value: (gt_lt == '>' and lab_value > ref_value) or\
-                                        (gt_lt == '<' and lab_value < ref_value)
-    sick_list = [row[0] for row in labs[1:] if row[2] == lab_name and stat(float(row[3]), value)]
-    sick_list = list(set(sick_list))
+    stat = lambda lab_value, ref_value: (gt_lt[0] == '>' and lab_value > ref_value) or\
+                                        (gt_lt[0] == '<' and lab_value < ref_value) # 0(1)
+    sick_list = [row[0] for row in labs[1:] if row[2] == lab_name and stat(float(row[3]), value)] # N * 0(1)
+    sick_list = list(set(sick_list)) # 0(1)
     return sick_list
+# 0(1) + N * 0(1) + 0(1)
+# 0(N)
 
 if __name__ == "__main__ ":
     patient_data = parse_data(
