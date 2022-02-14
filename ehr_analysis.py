@@ -40,6 +40,20 @@ def sick_patients(lab, gt_lt, value, lab_name):
 # 0(1) + N * 0(1) + 0(1)
 # 0(N)
 
+def patient_age(patients, patient_id):
+    '''
+    A function that computes the age at first admission of any given patient
+    @param patients: input data
+    @param patient_id: specific patient
+    @return: age of the specific patient
+    '''
+    date0 = datetime.now()
+    for patient in patients:
+        birth = datetime.strptime(patient[2], '%Y-%m-%d %H:%M:%S.%f')
+        if patient[0] == patient_id:
+            return round((date0 - birth).days / 365, 1)
+            break
+
 if __name__ == "__main__ ":
     patient_data = parse_data(
         "/Users/jane/2022/SP2022/BIOSTAT821/PatientCorePopulatedTable.txt"
