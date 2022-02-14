@@ -1,0 +1,28 @@
+import ehr_analysis
+import pytest
+
+def test_parse_data():
+    '''
+    A test function that checks whether the parse_data function returns the correct list for patient data
+    '''
+    assert ['64182B95-EB72-4E2B-BE77-8050B71498CE', 'Male', '1952-01-18 19:51:12.917', 'African American', 'Separated',
+            'English', '13.03'] in ehr_analysis.filename
+    assert len(ehr_analysis.filename) == 101
+
+    '''
+    A test function that checks whether the parse_data function returns the correct list for lab data
+    '''
+    assert ['1A8791E3-A61C-455A-8DEE-763EB90C9B2C', '1', 'CBC: MCH', '35.8', 'pg',
+            '1992-06-30 03:50:11.777'] in ehr_analysis.filename
+    assert len(ehr_analysis.filename) == 111484
+
+def test_num_older_than():
+    '''
+    A test function that checks whether the num_older_than function returns the correct value
+    '''
+    assert ehr_analysis.num_older_than(50, ehr_analysis.dataname) == 77
+def test_sick_patients():
+    '''
+    A test function that checks whether the sic_patients function returns the correct value
+    '''
+    assert ehr_analysis.sick_patients(ehr_analysis.labs, 'METABOLIC: ALBUMIN', ">", 5.9) == 42
