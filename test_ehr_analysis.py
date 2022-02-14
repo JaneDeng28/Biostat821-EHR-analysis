@@ -1,7 +1,7 @@
 import ehr_analysis
 import pytest
 
-def test_parse_data():
+def test_parse_data_patient():
     '''
     A test function that checks whether the parse_data function returns the correct list for patient data
     '''
@@ -9,6 +9,7 @@ def test_parse_data():
             'English', '13.03'] in ehr_analysis.filename
     assert len(ehr_analysis.filename) == 101
 
+def test_parse_data_lab():
     '''
     A test function that checks whether the parse_data function returns the correct list for lab data
     '''
