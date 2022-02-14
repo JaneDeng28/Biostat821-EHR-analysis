@@ -26,3 +26,9 @@ def test_sick_patients():
     A test function that checks whether the sic_patients function returns the correct value
     '''
     assert ehr_analysis.sick_patients(ehr_analysis.labs, 'METABOLIC: ALBUMIN', ">", 5.9) == 42
+    
+def test_patient_age():
+    '''
+    A test function that checks whether the patient_age function returns the correct age at first admission
+    '''
+    assert ehr_analysis.patient_age(ehr_analysis.patient, "FB2ABB23-C9D0-4D09-8464-49BF0B982F0F") == 74
