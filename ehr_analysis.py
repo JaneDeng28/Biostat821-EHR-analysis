@@ -31,14 +31,33 @@ def num_older_than(age_old:Union[int, float], dataname):
     return num
 # 5 * N -> 0(N)
 
-def sick_patients(lab, gt_lt, value, lab_name):
-    stat = lambda lab_value, ref_value: (gt_lt[0] == '>' and lab_value > ref_value) or\
-                                        (gt_lt[0] == '<' and lab_value < ref_value) # 0(1)
-    sick_list = [row[0] for row in labs[1:] if row[2] == lab_name and stat(float(row[3]), value)] # N * 0(1)
-    sick_list = list(set(sick_list)) # 0(1)
-    return sick_list
-# 0(1) + N * 0(1) + 0(1)
-# 0(N)
+def sick_patients(lab, gt_lt, value, lablist): 
+    lab_name = 0
+    lab_value = 0
+    
+    for i in range(len(lablist[0])): # 6 times
+        if lablist[0][i] == 'LabName': #O(1)
+            lab_name = i
+        if lablist[0][i] == 'LabValue': #O(1)
+            lab_value = i
+    
+    Larger = []
+    Smaller = []
+
+    for i in range(1, len(lablist)): # N times
+        if lablist[i][lab_name] == lab: #O(1)
+            if gt_lt == '>' and float(lablist[i][lab_value]) > value: 
+                Larger.append(lablist[i][0])
+            elif gt_lt == '<' and float(lablist[i][lab_value]) < value:
+                Smaller.append(lablist[i][0])
+    
+    idlist = []
+    newlist = []
+    
+    if Larger != [] and gt_lt == '>':
+        idlist = Larger
+    if Smaller != [] and gt_lt == '<':
+        idlist = Smaller
 
 def patient_age(patients, patient_id):
     '''
