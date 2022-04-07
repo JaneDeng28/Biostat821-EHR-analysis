@@ -4,7 +4,7 @@ from typing import Union
 """Data Parsing"""
 
 
-def parse_data(filename: str) -> list:
+def parse_data(filename: str) -> list[str]:
     result = []
     with open(filename, "r") as f:
         lines = f.readlines()
