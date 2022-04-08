@@ -14,8 +14,8 @@ def test_parse_data_patient():
         "Separated",
         "English",
         "13.03",
-    ] in ehr_analysis.filename
-    assert len(ehr_analysis.filename) == 101
+    ] in ehr_analysis.patient
+    assert len(ehr_analysis.patient) == 101
 
 
 def test_parse_data_lab():
@@ -29,8 +29,8 @@ def test_parse_data_lab():
         "35.8",
         "pg",
         "1992-06-30 03:50:11.777",
-    ] in ehr_analysis.filename
-    assert len(ehr_analysis.filename) == 111484
+    ] in ehr_analysis.lab
+    assert len(ehr_analysis.labs) == 111484
 
 
 def test_num_older_than():
