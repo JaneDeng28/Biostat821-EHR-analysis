@@ -37,7 +37,7 @@ def num_older_than(age_old: Union[int, float], dataname) -> int:
 # 5 * N -> 0(N)
 
 
-def sick_patients(lab, gt_lt, value, lablist) -> list:
+def sick_patients(lab, gt_lt, value, lablist) -> list[str]:
     lab_name = 0
     lab_value = 0
 
