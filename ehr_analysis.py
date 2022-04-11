@@ -23,7 +23,7 @@ def parse_data(filename: str) -> list[str]:
     # -> O(N)
 
 
-def num_older_than(age_old: Union[int, float], dataname) -> int:
+def num_older_than(age_old: Union[int, float], dataname: str) -> int:
     num = 0
     for record in dataname:  # N
         birth = record["PatientDateOfBirth"]  # 0(1)
@@ -37,7 +37,7 @@ def num_older_than(age_old: Union[int, float], dataname) -> int:
 # 5 * N -> 0(N)
 
 
-def sick_patients(lab, gt_lt, value, lablist) -> list[str]:
+def sick_patients(lab:str, gt_lt:str, value:float, lablist:list[str]) -> list[str]:
     lab_name = 0
     lab_value = 0
 
@@ -71,7 +71,7 @@ def sick_patients(lab, gt_lt, value, lablist) -> list[str]:
     return newlist
 
 
-def patient_age(patients, patient_id) -> int:
+def patient_age(patients:list[str], patient_id:list[str]) -> int:
     """
     A function that computes the age at first admission of any given patient
     @param patients: input data
