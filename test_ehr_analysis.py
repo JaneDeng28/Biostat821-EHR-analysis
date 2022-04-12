@@ -37,7 +37,7 @@ def test_num_older_than():
     """
     A test function that checks whether the num_older_than function returns the correct value
     """
-    assert ehr_analysis.num_older_than(50, ehr_analysis.dataname) == 77
+    assert ehr_analysis.num_older_than(50, ehr_analysis.patient_data) == 77
 
 
 def test_sick_patients():
