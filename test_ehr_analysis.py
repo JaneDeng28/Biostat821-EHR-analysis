@@ -14,7 +14,7 @@ def test_parse_data_patient():
         "Separated",
         "English",
         "13.03",
-    ] in ehr_analysis.patient
+    ] in ehr_analysis.patient_data
     assert len(ehr_analysis.patient_data) == 101
 
 
@@ -29,7 +29,7 @@ def test_parse_data_lab():
         "35.8",
         "pg",
         "1992-06-30 03:50:11.777",
-    ] in ehr_analysis.lab
+    ] in ehr_analysis.lab_data
     assert len(ehr_analysis.lab_data) == 111484
 
 
@@ -45,7 +45,7 @@ def test_sick_patients():
     A test function that checks whether the sic_patients function returns the correct value
     """
     assert (
-        ehr_analysis.sick_patients(ehr_analysis.labs, "METABOLIC: ALBUMIN", ">", 5.9)
+        ehr_analysis.sick_patients(ehr_analysis.lab_data, "METABOLIC: ALBUMIN", ">", 5.9)
         == 42
     )
 
@@ -56,7 +56,7 @@ def test_patient_age():
     """
     assert (
         ehr_analysis.patient_age(
-            ehr_analysis.patient, "FB2ABB23-C9D0-4D09-8464-49BF0B982F0F"
+            ehr_analysis.patient_data, "FB2ABB23-C9D0-4D09-8464-49BF0B982F0F"
         )
         == 74
     )
