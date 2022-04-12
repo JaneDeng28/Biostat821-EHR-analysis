@@ -89,9 +89,9 @@ if __name__ == "__main__ ":
     patient_data = parse_data(
         "/Users/jane/2022/SP2022/BIOSTAT821/PatientCorePopulatedTable.txt"
     )
-    print(num_older_than(51.2, dataname))
+    print(num_older_than(51.2, patient_data))
 
     lab_data = parse_data(
         "/Users/jane/2022/SP2022/BIOSTAT821/LabsCorePopulatedTable.txt"
     )
-    print(sick_patients("METABOLIC: ALBUMIN", ">", 4.0, lab_name))
+    print(sick_patients("METABOLIC: ALBUMIN", ">", 4.0, lab_data))
