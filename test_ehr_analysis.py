@@ -1,8 +1,7 @@
 import ehr_analysis
 import pytest
 
-
-def test_parse_data_patient():
+def test_parse_patient():
     """
     A test function that checks whether the parse_data function returns the correct list for patient data
     """
@@ -18,7 +17,7 @@ def test_parse_data_patient():
     assert len(ehr_analysis.patient_data) == 101
 
 
-def test_parse_data_lab():
+def test_parse_lab():
     """
     A test function that checks whether the parse_data function returns the correct list for lab data
     """
@@ -37,7 +36,7 @@ def test_num_older_than():
     """
     A test function that checks whether the num_older_than function returns the correct value
     """
-    assert ehr_analysis.num_older_than(50, ehr_analysis.patient_data) == 77
+    assert ehr_analysis.num_older_than(50, ehr_analysis.patient_data) == 78
 
 
 def test_sick_patients():
@@ -45,7 +44,9 @@ def test_sick_patients():
     A test function that checks whether the sic_patients function returns the correct value
     """
     assert (
-        ehr_analysis.sick_patients(ehr_analysis.lab_data, "METABOLIC: ALBUMIN", ">", 5.9)
+        ehr_analysis.sick_patients(
+            ehr_analysis.lab_data, "METABOLIC: ALBUMIN", ">", 5.9
+        )
         == 42
     )
 
