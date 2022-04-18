@@ -1,10 +1,10 @@
 import ehr_analysis
 
 patient_data = ehr_analysis.parse_patient(
-    "https://github.com/JaneDeng28/Biostat821-EHR-analysis/blob/077fbfefd6f2ad1c982fa3de946585e4b9c7040a/test_patient.txt"
+    "test_patient.txt"
 )
 lab_data = ehr_analysis.parse_lab(
-    "https://github.com/JaneDeng28/Biostat821-EHR-analysis/blob/077fbfefd6f2ad1c982fa3de946585e4b9c7040a/test_lab.txt"
+    "test_lab.txt"
 )
 
 
