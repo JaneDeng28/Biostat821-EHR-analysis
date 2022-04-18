@@ -61,10 +61,14 @@ def patient_age(patients:List[str], patient_id:List[str]) -> int:
         if patient[0] == patient_id:
             return round((date0 - birth).days / 365, 1)
 
-"""
+
+
 if __name__ == "__main__ ":
-"""
-patient_data = parse_patient("/Users/jane/2022/SP2022/BIOSTAT821/PatientCorePopulatedTable.txt")    
-print(num_older_than(51.2, patient_data))
-lab_data = parse_lab("/Users/jane/2022/SP2022/BIOSTAT821/LabsCorePopulatedTable.txt")    
-print(sick_patients("METABOLIC: ALBUMIN", ">", 4.0, lab_data))
+    patient_data = parse_patient(
+        "/Users/jane/2022/SP2022/BIOSTAT821/PatientCorePopulatedTable.txt"
+    )
+    print(num_older_than(51.2, patient_data))
+    lab_data = parse_lab(
+        "/Users/jane/2022/SP2022/BIOSTAT821/LabsCorePopulatedTable.txt"
+    )
+    print(sick_patients(lab_data, "METABOLIC: ALBUMIN", ">", 4.0))
