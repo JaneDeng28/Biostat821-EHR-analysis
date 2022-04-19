@@ -44,5 +44,5 @@ try:
 except:
     raise ValueError("Input shold follow the instruction")
     
-print(sick_patients(thatlab, gtlt, index, labs))
+print(sick_patients(labs，thatlab, gtlt, index))
 print(len(sick_patients(labs, 'METABOLIC: ALBUMIN', '>', 5.9)))
