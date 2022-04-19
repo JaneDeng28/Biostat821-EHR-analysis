@@ -1,10 +1,11 @@
 from datetime import datetime
+from typing import List
 
-def parse_data(filename):
+def parse_data(filename:str) -> List[str]:
     with open(filename) as table:
         return [line.replace('\n','').split('\t') for line in table][1:]
 
-def num_older_than(age, patients):
+def num_older_than(age:float, patients:List[str]) -> int:
     DOB = [patient[2] for patient in patients][1:]
     DOB = [datetime.strptime(patient, '%Y-%m-%d %H:%M:%S.%f') for patient in DOB]
     Today = datetime.now()
@@ -12,7 +13,7 @@ def num_older_than(age, patients):
     return len([patient for patient in diff if patient > age])  
     
 
-def sick_patients(lab, gt_lt, value, lablist): 
+def sick_patients(lablist: List[List[str]], lab: str, gt_lt: str, value: float) -> List[str]: 
     stat = lambda lab_value, ref_value: (gt_lt == '>' and lab_value > ref_value) or (gt_lt == '<' and lab_value < ref_value)
     sick_list = [row[0] for row in lablist[1:] if row[2] == lab and stat(float(row[3]), value)]
     sick_list = list(set(sick_list))
