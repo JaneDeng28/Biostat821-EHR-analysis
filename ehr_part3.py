@@ -14,13 +14,11 @@ def parse_data(filename):
     with open(filename) as table:
         return [line.replace('\n','').split('\t') for line in table][1:]
 
-class patient():
-    global patients, labs
-    patients = parse_data('/Users/jane/2022/SP2022/BIOSTAT821/hw2/PatientCorePopulatedTable.txt')
-    labs = parse_data('/Users/jane/2022/SP2022/BIOSTAT821/hw2/LabsCorePopulatedTable.txt')
+class Patient():
 
     def __init__(self, PatientID):
-        for patient in patients:
+        self.patients = parse_data('PatientCorePopulatedTable.txt')
+        for patient in self.patients:
             if patient[0] == PatientID:
                 self.ID = patient[0]
                 self.Gender = patient[1]
@@ -37,23 +35,21 @@ class patient():
     def __lt__(self, other):
         if isinstance(other, float):
             return self.age < other
-        if isinstance(other, patient):
+        if isinstance(other, self.patients):
             return self.age < other.age
 
     def __gt__(self, other):
         if isinstance(other, float):
             return self.age > other
-        if isinstance(other, patient):
+        if isinstance(other, self.patients):
             return self.age > other.age
     
 
 class Lab():
-
-    global labs
-    labs = parse_data('/Users/jane/2022/SP2022/BIOSTAT821/hw2/LabsCorePopulatedTable.txt')
     
     def __init__(self, PatientID, LabName, LabDateTime):
-        for lab in labs:
+        self.labs = parse_data('LabsCorePopulatedTable.txt')
+        for lab in self.labs:
             if PatientID == lab[0] and LabName == lab[2] and LabDateTime == datetime.strftime(lab[5], '%Y-%m-%d %H:%M:%S.%f'):
                 self.ID = lab[0]
                 self.LabName = lab[2]
@@ -62,4 +58,4 @@ class Lab():
                 self.LabDateTime = datetime.strftime(lab[5], '%Y-%m-%d %H:%M:%S.%f')
 
 if __name__ == '__main__':
-	print(patient('FA157FA5-F488-4884-BF87-E144630D595C') > 90.0)
+	print(Patient('FA157FA5-F488-4884-BF87-E144630D595C') > 90.0)
