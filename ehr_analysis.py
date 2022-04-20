@@ -1,26 +1,57 @@
 from datetime import datetime
+from typing import Union
 from typing import List
 
-def parse_data(filename:str) -> List[str]:
-    with open(filename) as table:
-        return [line.replace('\n','').split('\t') for line in table][1:]
+"""Data Parsing"""
+
+
+from datetime import datetime
+from typing import List
+
+def parse_patient(patient: str) -> List[List[str]]: 
+    with open(patient, "r") as file: 
+        rows = file.readlines() 
+        lists = [] 
+    for row in rows: 
+        row = row.strip() 
+        row = row.split("\t") 
+        lists.append(row)
+    return lists 
+
+def parse_lab(lab: str) -> List[List[str]]: 
+    with open(lab, "r") as file: 
+        rows = file.readlines() 
+        lists = [] 
+    for row in rows: 
+        row = row.strip() 
+        row = row.split("\t")
+        lists.append(row)
+    return lists 
+
 
 def num_older_than(age:float, patients:List[str]) -> int:
-    DOB = [patient[2] for patient in patients][1:]
-    DOB = [datetime.strptime(patient, '%Y-%m-%d %H:%M:%S.%f') for patient in DOB]
-    Today = datetime.now()
-    diff = [round((Today - DOB).days / 365, 1) for patient in DOB]
-    return len([patient for patient in diff if patient > age])  
+    count = 0
+    for i in range(len(patients)):
+        if patients[i].age > age:
+            count += 1
+    return count
     
+def sick_patients(lablist: List[List[str]], lab: str, gt_lt: str, value: float) -> List[str]:
+    patid = set()
+    for i in range(1, len(lablist)-1):
+        if lablist[i][2] == lab:
+            if gt_lt == ">":
+                if float(lablist[i][3]) > value:
+                    patid.add(lablist[i][0])
+            elif gt_lt == "<":
+                if float(lablist[i][3]) < value:
+                    patid.add(lablist[i][0])
+            else: 
+                raise ValueError("Please input vaild '<' or '>'") 
+    return list(patid)
 
-def sick_patients(lablist: List[List[str]], lab: str, gt_lt: str, value: float) -> List[str]: 
-    stat = lambda lab_value, ref_value: (gt_lt == '>' and lab_value > ref_value) or (gt_lt == '<' and lab_value < ref_value)
-    sick_list = [row[0] for row in lablist[1:] if row[2] == lab and stat(float(row[3]), value)]
-    sick_list = list(set(sick_list))
-    return sick_list
 
-
-def patient_age(patients:List[str], patient_id:List[str]) -> int:
+def patient_age(patients: List[str], patient_id: List[str]) -> int:
     """
     A function that computes the age at first admission of any given patient
     @param patients: input data
@@ -29,20 +60,17 @@ def patient_age(patients:List[str], patient_id:List[str]) -> int:
     """
     date0 = datetime.now()
     for patient in patients:
-        birth = datetime.strptime(patient[2], "%Y-%m-%d %H:%M:%S.%f")
-        if patient[0] == patient_id:
+        birth = patient.DOB
+        if patient.ID == patient_id:
             return round((date0 - birth).days / 365, 1)
 
-if __name__ == '__main__':
-    patients = parse_data('/Users/jane/2022/SP2022/BIOSTAT821/hw2/PatientCorePopulatedTable.txt')
-    labs = parse_data('/Users/jane/2022/SP2022/BIOSTAT821/hw2/LabsCorePopulatedTable.txt')
-try:
-	thatlab = input("Enter lab name")
-	ltgt = input("Enter > or < ")
-    index = float(input("Enter a index value"))
-    print(sick_patients(thatlab, gtlt, index, labs))
-except:
-    raise ValueError("Input shold follow the instruction")
-    
-print(sick_patients(labs，thatlab, gtlt, index))
-print(len(sick_patients(labs, 'METABOLIC: ALBUMIN', '>', 5.9)))
+
+if __name__ == "__main__ ":
+    patient_data = parse_patient(
+        "/Users/jane/2022/SP2022/BIOSTAT821/PatientCorePopulatedTable.txt"
+    )
+    print(num_older_than(51.2, patient_data))
+    lab_data = parse_lab(
+        "/Users/jane/2022/SP2022/BIOSTAT821/LabsCorePopulatedTable.txt"
+    )
+    print(sick_patients(lab_data, "METABOLIC: ALBUMIN", ">", 4.0))
