@@ -13,19 +13,26 @@ At minimum you should end up with:
 
 """
 
+
+class Lab:
+    def __init__(
+        self, PatientID: str, LabName: str, LabValue: float, LabUnits: str, LabDateTime: str
+    ) -> None:
+        self.PatientID = PatientID
+        self.LabName = LabName
+        self.LabValue = LabValue
+        self.LabUnits = LabUnits
+        self.LabDateTime = datetime.strptime(LabDateTime, "%Y-%m-%d %H:%M:%S.%f")
+
+
 class Patient:
-    def __init__(self, PatientID: str) -> None:
-        self.patients = ehr_analysis.parse_patient("test_patient.txt")
-        for patient in self.patients:
-            if patient[0] == PatientID:
-                self.ID = patient[0]
-                self.Gender = patient[1]
-                self.DOB = datetime.strptime(patient[2], "%Y-%m-%d %H:%M:%S.%f")
-                self.Race = patient[3]
-                self.MaritalStatus = patient[4]
-                self.Language = patient[5]
-                self.Poverty = patient[6]
- 
+    def __init__(self, PatientID: str, Gender: str, DOB: str, Race: str) -> None:
+        self.PatientID = PatientID
+        self.Gender = Gender
+        self.DOB = datetime.strptime(DOB, "%Y-%m-%d %H:%M:%S.%f")
+        self.Race = Race
+        self.Labs: List = []
+
     @property
     def age(self) -> float:
         return round((datetime.now() - self.DOB).days / 365, 1)
@@ -41,22 +48,6 @@ class Patient:
             return self.age > other
         if isinstance(other, self.patients):
             return self.age > other.age
-
-
-class Lab:
-    def __init__(self, PatientID: str, LabName: str, LabDateTime: datetime):
-        self.labs = ehr_analysis.parse_lab("test_lab.txt")
-        for lab in self.labs:
-            if (
-                PatientID == lab[0]
-                and LabName == lab[2]
-                and LabDateTime == datetime.strptime(lab[5], "%Y-%m-%d %H:%M:%S.%f")
-            ):
-                self.ID = lab[0]
-                self.LabName = lab[2]
-                self.LabValue = lab[3]
-                self.LabUnits = lab[4]
-                self.LabDateTime = datetime.strptime(lab[5], "%Y-%m-%d %H:%M:%S.%f")
 
 
 if __name__ == "__main__":
