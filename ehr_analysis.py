@@ -8,37 +8,42 @@ from typing import List
 from datetime import datetime
 from typing import List
 
-def parse_patient(patient: str) -> List[List[str]]: 
-    with open(patient, "r") as file: 
-        rows = file.readlines() 
-        lists = [] 
-    for row in rows: 
-        row = row.strip() 
-        row = row.split("\t") 
-        lists.append(row)
-    return lists 
 
-def parse_lab(lab: str) -> List[List[str]]: 
-    with open(lab, "r") as file: 
-        rows = file.readlines() 
-        lists = [] 
-    for row in rows: 
-        row = row.strip() 
+def parse_patient(patient: str) -> List[List[str]]:
+    with open(patient, "r") as file:
+        rows = file.readlines()
+        lists = []
+    for row in rows:
+        row = row.strip()
         row = row.split("\t")
         lists.append(row)
-    return lists 
+    return lists
 
 
-def num_older_than(age:float, patients:List[str]) -> int:
+def parse_lab(lab: str) -> List[List[str]]:
+    with open(lab, "r") as file:
+        rows = file.readlines()
+        lists = []
+    for row in rows:
+        row = row.strip()
+        row = row.split("\t")
+        lists.append(row)
+    return lists
+
+
+def num_older_than(age: float, patients: List[str]) -> int:
     count = 0
     for i in range(len(patients)):
         if patients[i].age > age:
             count += 1
     return count
-    
-def sick_patients(lablist: List[List[str]], lab: str, gt_lt: str, value: float) -> List[str]:
+
+
+def sick_patients(
+    lablist: List[List[str]], lab: str, gt_lt: str, value: float
+) -> List[str]:
     patid = set()
-    for i in range(1, len(lablist)-1):
+    for i in range(1, len(lablist) - 1):
         if lablist[i][2] == lab:
             if gt_lt == ">":
                 if float(lablist[i][3]) > value:
@@ -46,8 +51,8 @@ def sick_patients(lablist: List[List[str]], lab: str, gt_lt: str, value: float) 
             elif gt_lt == "<":
                 if float(lablist[i][3]) < value:
                     patid.add(lablist[i][0])
-            else: 
-                raise ValueError("Please input vaild '<' or '>'") 
+            else:
+                raise ValueError("Please input vaild '<' or '>'")
     return list(patid)
 
 
