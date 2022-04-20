@@ -40,17 +40,17 @@ def num_older_than(age: float, patients: List[str]) -> int:
 
 
 def sick_patients(
-    lablist: List[List[str]], lab: str, gt_lt: str, value: float
+    lablist: List[str], lab: str, gt_lt: str, value: float
 ) -> List[str]:
     patid = set()
     for i in range(1, len(lablist) - 1):
-        if lablist[i][2] == lab:
+        if lablist[i].LabName == lab:
             if gt_lt == ">":
-                if float(lablist[i][3]) > value:
-                    patid.add(lablist[i][0])
+                if float(lablist[i].LabValue) > value:
+                    patid.add(lablist[i].PatientID)
             elif gt_lt == "<":
-                if float(lablist[i][3]) < value:
-                    patid.add(lablist[i][0])
+                if float(lablist[i].LabValue) < value:
+                    patid.add(lablist[i].PatientID)
             else:
                 raise ValueError("Please input vaild '<' or '>'")
     return list(patid)
@@ -66,7 +66,7 @@ def patient_age(patients: List[str], patient_id: List[str]) -> int:
     date0 = datetime.now()
     for patient in patients:
         birth = patient.DOB
-        if patient.ID == patient_id:
+        if patient.PatientID == patient_id:
             return round((date0 - birth).days / 365, 1)
 
 
