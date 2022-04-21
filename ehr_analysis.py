@@ -9,7 +9,7 @@ from datetime import datetime
 from typing import List
 
 
-def parse_patient(patient: str) -> List[List[str]]:
+def parse_patient(patfilename: str) -> List[Patient]:
     with open(patient, "r") as file:
         rows = file.readlines()
         lists = []
@@ -20,7 +20,7 @@ def parse_patient(patient: str) -> List[List[str]]:
     return lists
 
 
-def parse_lab(lab: str) -> List[List[str]]:
+def parse_lab(labfilename: str) -> List[Lab]:
     with open(lab, "r") as file:
         rows = file.readlines()
         lists = []
