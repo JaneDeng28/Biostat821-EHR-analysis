@@ -15,23 +15,31 @@ At minimum you should end up with:
 
 
 class Lab:
-    def __init__(
-        self, PatientID: str, LabName: str, LabValue: float, LabUnits: str, LabDateTime: str
-    ) -> None:
-        self.PatientID = PatientID
-        self.LabName = LabName
-        self.LabValue = LabValue
-        self.LabUnits = LabUnits
-        self.LabDateTime = datetime.strptime(LabDateTime, "%Y-%m-%d %H:%M:%S.%f")
+
+    def __init__(self, PatientID: str, LabName: str, LabDateTime: str, labfilename: List[str]):
+        self.lab = ehr_analysis.parse_lab(labfilename)
+        for row in self.lab:
+            if PatientID == row[0] and LabName == row[2] and LabDateTime == datetime.strptime(row[5], '%Y-%m-%d %H:%M:%S.%f'):
+                self.PatientID = row[0]
+                self.LabName = row[2]
+                self.LabValue = row[3]
+                self.LabUnits = row[4]
+                self.LabDateTime = datetime.strptime(row[5], '%Y-%m-%d %H:%M:%S.%f')
 
 
 class Patient:
-    def __init__(self, PatientID: str, Gender: str, DOB: str, Race: str) -> None:
-        self.PatientID = PatientID
-        self.Gender = Gender
-        self.DOB = datetime.strptime(DOB, "%Y-%m-%d %H:%M:%S.%f")
-        self.Race = Race
-        self.Labs: List = []
+
+    def __init__(self, PatientID: str, patfilename: List[str]):
+        self.patient = ehr_analysis.parse_patient(patfilename)
+        for row in self.patient:
+            if row[0] == PatientID:
+                self.PatientID = row[0]
+                self.gender = row[1]
+                self.DOB = datetime.strptime(row[2], '%Y-%m-%d %H:%M:%S.%f')
+                self.race = row[3]
+                self.marital = row[4]
+                self.language = row[5]
+                self.poverty = row[6]
 
     @property
     def age(self) -> float:
