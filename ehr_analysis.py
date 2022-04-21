@@ -1,16 +1,12 @@
 from datetime import datetime
-from typing import Union
 from typing import List
+from ehr_part3 import Patient, Lab
 
 """Data Parsing"""
 
 
-from datetime import datetime
-from typing import List
-
-
 def parse_patient(patfilename: str) -> List[Patient]:
-    with open(patient, "r") as file:
+    with open(patfilename, "r") as file:
         rows = file.readlines()
         lists = []
     for row in rows:
@@ -21,7 +17,7 @@ def parse_patient(patfilename: str) -> List[Patient]:
 
 
 def parse_lab(labfilename: str) -> List[Lab]:
-    with open(lab, "r") as file:
+    with open(labfilename, "r") as file:
         rows = file.readlines()
         lists = []
     for row in rows:
@@ -29,6 +25,9 @@ def parse_lab(labfilename: str) -> List[Lab]:
         row = row.split("\t")
         lists.append(row)
     return lists
+
+
+"""Functions"""
 
 
 def num_older_than(age: float, patients: List[str]) -> int:
@@ -39,9 +38,7 @@ def num_older_than(age: float, patients: List[str]) -> int:
     return count
 
 
-def sick_patients(
-    lablist: List[str], lab: str, gt_lt: str, value: float
-) -> List[str]:
+def sick_patients(lablist: List[str], lab: str, gt_lt: str, value: float) -> List[Lab]:
     patid = set()
     for i in range(1, len(lablist) - 1):
         if lablist[i].LabName == lab:
@@ -71,11 +68,7 @@ def patient_age(patients: List[str], patient_id: List[str]) -> int:
 
 
 if __name__ == "__main__ ":
-    patient_data = parse_patient(
-        "/Users/jane/2022/SP2022/BIOSTAT821/PatientCorePopulatedTable.txt"
-    )
+    patient_data = parse_patient("PatientCorePopulatedTable.txt")
     print(num_older_than(51.2, patient_data))
-    lab_data = parse_lab(
-        "/Users/jane/2022/SP2022/BIOSTAT821/LabsCorePopulatedTable.txt"
-    )
+    lab_data = parse_lab("LabsCorePopulatedTable.txt")
     print(sick_patients(lab_data, "METABOLIC: ALBUMIN", ">", 4.0))
