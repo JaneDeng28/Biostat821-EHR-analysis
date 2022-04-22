@@ -4,13 +4,19 @@ from ehr_part3 import Patient, Lab
 
 """Data Parsing"""
 
-def parse_patient(patfilename:List[str]) -> List[Patient]:
-	with open(patfilename) as patient_table:
-		return [line.replace('\n','').split('\t') for line in patient_table][1:]
+def build_patient(filname:List[str]) -> List[Patient]:
+    pat = []
+    with open(filname) as file:
+        for row in file.readlines()[1:]:
+            pat.append(Patient(row.split("\t")))
+    return pat
 
-def parse_lab(labfilename:List[str]) -> List[Lab]:
-	with open(labfilename) as labs_table:
-		return [line.replace('\n','').split('\t') for line in labs_table][1:]
+def build_lab(filname:List[str]) -> List[Lab]:
+    lab = []
+    with open(filname) as file:
+        for row in file.readlines()[1:]:
+            lab.append(Lab(row.split("\t")))
+    return lab
 
 """Functions"""
 
