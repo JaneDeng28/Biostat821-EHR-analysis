@@ -2,8 +2,8 @@
 import ehr_analysis
 import ehr_part3
 
-testpat = ehr_analysis.build_patient("/Users/jane/2022/SP2022/BIOSTAT821/ehr-project/test_patient.txt")
-testlab = ehr_analysis.build_lab("/Users/jane/2022/SP2022/BIOSTAT821/ehr-project/test_lab.txt")
+testpat = ehr_analysis.build_patient("test_patient.txt")
+testlab = ehr_analysis.build_lab("test_lab.txt")
 
 def test_build_patient():
     assert testpat[0].gender == "Male"
