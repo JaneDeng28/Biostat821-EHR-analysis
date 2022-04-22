@@ -1,25 +1,18 @@
 from datetime import datetime
 import sqlite3
-
-
-def parse_data(filename):
-    with open(filename) as table:
-        return [line.replace("\n", "").split("\t") for line in table][1:]
-
+import ehr_analysis
 
 class Patient:
-    global patients
-    patients = parse_data(
-        "/Users/jane/2022/SP2022/BIOSTAT821/ehr-project/PatientCorePopulatedTable.txt"
-    )
-
-    def __init__(self, patientID):
-        PATDB = sqlite3.connect(
-            "/Users/jane/2022/SP2022/BIOSTAT821/ehr-project/patient.db"
+    def __init__(self, patientID, PATDB_location, filename):
+        self.patient = ehr_analysis.parse_patient(filename)
+        self.PATDB = sqlite3.connect(
+            PATDB_location,
+            detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES,
         )
-        cursor = PATDB.cursor()
-        cursor.execute(
-            """CREATE TABLE IF NOT EXISTS PATIENT(
+        self.cursor = self.PATDB.cursor()
+        self.cursor.execute(
+            """
+            CREATE TABLE IF NOT EXISTS PATIENT(
             PATID TEXT PRIMARY KEY,
             GENDER TEXT NOT NULL,
             DOB TIMESTAMP,
@@ -30,8 +23,8 @@ class Patient:
             )
         """
         )
-        for row in patients:
-            cursor.execute(
+        for row in self.patient:
+            self.cursor.execute(
                 "INSERT OR REPLACE INTO PATIENT (PATID, GENDER, DOB, RACE, MARITAL, LANGUAGE, PERCT_BELOW_PROVERTY) VALUES (?,?,?,?,?,?,?)",
                 (
                     row[0],
@@ -43,25 +36,27 @@ class Patient:
                     row[6],
                 ),
             )
-        cursor.execute("CREATE UNIQUE INDEX IF NOT EXISTS idx_id ON PATIENT (PATID)")
-        cursor.execute(
+        self.cursor.execute(
+            "CREATE UNIQUE INDEX IF NOT EXISTS idx_id ON PATIENT (PATID)"
+        )
+        self.cursor.execute(
             "SELECT * FROM PATIENT INDEXED BY idx_id WHERE PATID=?", (patientID,)
         )
-        rows = cursor.fetchall()
+        rows = self.cursor.fetchall()
         for row in rows:
             print(row)
 
 
-class Observation:
-    global labs
-    labs = parse_data(
-        "/Users/jane/2022/SP2022/BIOSTAT821/ehr-project/LabsCorePopulatedTable.txt"
-    )
+class Lab:
+    def __init__(self, patientID, LABDB_location, filename):
 
-    def __init__(self, patientID):
-        labdb = sqlite3.connect("/Users/jane/2022/SP2022/BIOSTAT821/ehr-project/lab.db")
-        cursor = labdb.cursor()
-        cursor.execute(
+        self.lab = ehr_analysis.parse_patient(filename)
+        self.LABDB = sqlite3.connect(
+            LABDB_location,
+            detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES,
+        )
+        self.cursor = self.LABDB.cursor()
+        self.cursor.execute(
             """CREATE TABLE IF NOT EXISTS LAB(
             PATID TEXT NOT NULL,
             NAME TEXT NOT NULL,
@@ -71,8 +66,8 @@ class Observation:
             )
         """
         )
-        for row in labs:
-            cursor.execute(
+        for row in self.lab:
+            self.cursor.execute(
                 "INSERT OR REPLACE INTO Labs (PATID, NAME, VALUE, UNIT, ORDER_TIME) VALUES (?,?,?,?,?)",
                 (
                     row[0],
@@ -82,15 +77,15 @@ class Observation:
                     datetime.strptime(row[5], "%Y-%m-%d %H:%M:%S.%f"),
                 ),
             )
-        cursor.execute("CREATE INDEX IF NOT EXISTS idx_id ON LAB (PATID)")
-        cursor.execute(
+        self.cursor.execute("CREATE INDEX IF NOT EXISTS idx_id ON LAB (PATID)")
+        self.cursor.execute(
             "SELECT * FROM LAB INDEXED BY idx_id WHERE PATID = ?", (patientID,)
         )
-        rows = cursor.fetchall()
+        rows = self.cursor.fetchall()
         for row in rows:
             print(row)
 
 
 if __name__ == "__main__":
     Patient("6E70D84D-C75F-477C-BC37-9177C3698C66")
-    Observation("6E70D84D-C75F-477C-BC37-9177C3698C66")
+    Lab("6E70D84D-C75F-477C-BC37-9177C3698C66")
