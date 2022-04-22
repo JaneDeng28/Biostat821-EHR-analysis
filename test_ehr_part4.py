@@ -2,10 +2,6 @@
 import ehr_analysis
 import ehr_analysis_part4
 
-"""
-patlocation = "/Users/jane/2022/SP2022/BIOSTAT821/ehr-project/patient.db"
-lablocation = "/Users/jane/2022/SP2022/BIOSTAT821/ehr-project/lab.db"
-"""
 patient_a = ehr_analysis_part4.Patient(
     PatientID="FB2ABB23-C9D0-4D09-8464-49BF0B982F0F", 
     PATDB_location = "patient.db",
@@ -24,14 +20,8 @@ patient_c = ehr_analysis_part4.Patient(
     patfilename = "test_patient.txt"
 )
 
-lab_a1 = ehr_analysis_part4.Lab(
+lab_a = ehr_analysis_part4.Lab(
     PatientID="1A8791E3-A61C-455A-8DEE-763EB90C9B2C",
-    PATDB_location = "lab.db",
-    patfilename = "test_lab.txt"
-)
-
-lab_a2 = ehr_analysis_part4.Lab(
-    PatientID="81C5B13B-F6B2-4E57-9593-6E7E4C13B2CE",
     PATDB_location = "lab.db",
     patfilename = "test_lab.txt"
 )
@@ -60,7 +50,7 @@ def test_sick_patients():
     assert (
         len(
             ehr_analysis_part4.sick_patients(
-                lablist=[lab_a1, lab_b, lab_c],
+                lablist=[lab_a, lab_b, lab_c],
                 lab="CBC: ABSOLUTE LYMPHOCYTES",
                 gt_lt=">",
                 value=5.9,
