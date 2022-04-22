@@ -16,30 +16,25 @@ At minimum you should end up with:
 
 class Lab:
 
-    def __init__(self, PatientID: str, LabName: str, LabDateTime: str, labfilename: List[str]):
-        self.lab = ehr_analysis.parse_lab(labfilename)
-        for row in self.lab:
-            if PatientID == row[0] and LabName == row[2] and LabDateTime == datetime.strptime(row[5], '%Y-%m-%d %H:%M:%S.%f'):
-                self.PatientID = row[0]
-                self.LabName = row[2]
-                self.LabValue = row[3]
-                self.LabUnits = row[4]
-                self.LabDateTime = datetime.strptime(row[5], '%Y-%m-%d %H:%M:%S.%f')
+    def __init__(self, labfilename: List[str]) -> None:
+            self.PatientID = labfilename[0]
+            self.AdmissionID = labfilename[1]
+            self.LabName = labfilename[2]
+            self.LabValue = labfilename[3]
+            self.LabUnits = labfilename[4]
+            self.LabDateTime = datetime.strptime(labfilename[5], '%Y-%m-%d %H:%M:%S.%f')
 
 
 class Patient:
 
-    def __init__(self, PatientID: str, patfilename: List[str]):
-        self.patient = ehr_analysis.parse_patient(patfilename)
-        for row in self.patient:
-            if row[0] == PatientID:
-                self.PatientID = row[0]
-                self.gender = row[1]
-                self.DOB = datetime.strptime(row[2], '%Y-%m-%d %H:%M:%S.%f')
-                self.race = row[3]
-                self.marital = row[4]
-                self.language = row[5]
-                self.poverty = row[6]
+    def __init__(self, patfilename: List[str]) -> None:
+        self.PatientID = patfilename[0]
+        self.gender = patfilename[1]
+        self.DOB = datetime.strptime(patfilename[2], '%Y-%m-%d %H:%M:%S.%f')
+        self.race = patfilename[3]
+        self.marital = patfilename[4]
+        self.language = patfilename[5]
+        self.poverty = patfilename[6]
 
     @property
     def age(self) -> float:
@@ -57,6 +52,5 @@ class Patient:
         if isinstance(other, self.patients):
             return self.age > other.age
 
-
 if __name__ == "__main__":
-    print(Patient("FA157FA5-F488-4884-BF87-E144630D595C") > 90.0)
+    print(Patient("FA157FA5-F488-4884-BF87-E144630D595C",patfilename="test_patient.txt") > 90.0)
