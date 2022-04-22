@@ -26,7 +26,7 @@ def test_sick_patients():
                 lablist=testlab,
                 lab="CBC: ABSOLUTE LYMPHOCYTES",
                 gt_lt=">",
-                value=5.9,
+                value=100,
             )
         )
         == 0
