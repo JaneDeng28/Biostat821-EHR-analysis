@@ -11,7 +11,7 @@ lablocation = "/Users/jane/2022/SP2022/BIOSTAT821/ehr-project/lab.db"
 class Patient:
 
     def __init__(self, PatientID:str, PATDB_location:str, patfilename:List[str]) -> None:
-        self.patient = ehr_analysis.parse_patient(patfilename)
+        self.patient = ehr_analysis.build_patient(patfilename)
         self.PATDB = sqlite3.connect(
             PATDB_location,
             detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES,
@@ -57,8 +57,7 @@ class Patient:
 class Lab:
 
     def __init__(self, PatientID:str, LABDB_location:str, labfilename:List[str]) -> None:
-
-        self.lab = ehr_analysis.parse_patient(labfilename)
+        self.lab = ehr_analysis.build_lab(labfilename)
         self.LABDB = sqlite3.connect(
             LABDB_location,
             detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES,
@@ -111,18 +110,18 @@ def num_older_than(age: int) -> int:
     PatientID = Patient.cursor.execute("SELECT PatientID FROM patients WHERE date('now') - date(PatientDateOfBirth) >" + str(age))
     return len(list(PatientID))
 
-def sick_patients(lbname: str, gt_lt: str, lbvalue: float) -> list:
+def sick_patients(labname: str, gt_lt: str, labvalue: float) -> list:
 
     if gt_lt == ">":
         sick_pat = Lab.cursor.execute("SELECT PatientID FROM labs WHERE LabName = '" 
-        + lbname 
+        + labname 
         + "'AND LabValue >" 
-        + str(lbvalue))
+        + str(labvalue))
     elif gt_lt == "<":
         Lab.cursor.execute("SELECT PatientID FROM labs WHERE LabName = '" 
-        + lbname 
+        + labname 
         + "'AND LabValue <" 
-        + str(lbvalue))
+        + str(labvalue))
         sick_pat = list(Lab.cursor.fetchall())
     else:
         raise ValueError("Please input vaild '<' or '>'")
@@ -141,6 +140,7 @@ def patient_age(PatientID: List[str]) -> list[float]:
     + "' AND AdmissionID =" 
     + str(1))
     return list(Lab.cursor.fetchall())
+
 
 
 if __name__ == "__main__":
