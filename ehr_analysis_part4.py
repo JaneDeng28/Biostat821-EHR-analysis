@@ -1,10 +1,17 @@
 from datetime import datetime
+from typing import List
 import sqlite3
 import ehr_analysis
 
+"""
+patlocation = "/Users/jane/2022/SP2022/BIOSTAT821/ehr-project/patient.db"
+lablocation = "/Users/jane/2022/SP2022/BIOSTAT821/ehr-project/lab.db"
+"""
+
 class Patient:
-    def __init__(self, patientID, PATDB_location, filename):
-        self.patient = ehr_analysis.parse_patient(filename)
+
+    def __init__(self, PatientID:str, PATDB_location:str, patfilename:List[str]) -> None:
+        self.patient = ehr_analysis.parse_patient(patfilename)
         self.PATDB = sqlite3.connect(
             PATDB_location,
             detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES,
@@ -40,7 +47,7 @@ class Patient:
             "CREATE UNIQUE INDEX IF NOT EXISTS idx_id ON PATIENT (PATID)"
         )
         self.cursor.execute(
-            "SELECT * FROM PATIENT INDEXED BY idx_id WHERE PATID=?", (patientID,)
+            "SELECT * FROM PATIENT INDEXED BY idx_id WHERE PATID=?", (PatientID,)
         )
         rows = self.cursor.fetchall()
         for row in rows:
@@ -48,9 +55,10 @@ class Patient:
 
 
 class Lab:
-    def __init__(self, patientID, LABDB_location, filename):
 
-        self.lab = ehr_analysis.parse_patient(filename)
+    def __init__(self, PatientID:str, LABDB_location:str, labfilename:List[str]) -> None:
+
+        self.lab = ehr_analysis.parse_patient(labfilename)
         self.LABDB = sqlite3.connect(
             LABDB_location,
             detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES,
@@ -79,7 +87,7 @@ class Lab:
             )
         self.cursor.execute("CREATE INDEX IF NOT EXISTS idx_id ON LAB (PATID)")
         self.cursor.execute(
-            "SELECT * FROM LAB INDEXED BY idx_id WHERE PATID = ?", (patientID,)
+            "SELECT * FROM LAB INDEXED BY idx_id WHERE PATID = ?", (PatientID,)
         )
         rows = self.cursor.fetchall()
         for row in rows:
