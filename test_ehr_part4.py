@@ -1,70 +1,11 @@
 """Test class and object-oriented functions."""
-import ehr_analysis
-import ehr_analysis_part4
+from ehr_analysis_part4 import (sick_patients, num_older_than, patient_age)
 
-patient_a = ehr_analysis_part4.Patient(
-    PatientID="FB2ABB23-C9D0-4D09-8464-49BF0B982F0F", 
-    PATDB_location = "patient.db",
-    patfilename = "test_patient.txt"
-)
+def test_number_older_than():
+    assert num_older_than(100) == 0
 
-patient_b = ehr_analysis_part4.Patient(
-    PatientID="7FD13988-E58A-4A5C-8680-89AC200950FA",
-    PATDB_location = "patient.db",
-    patfilename = "test_patient.txt"
-)
-
-patient_c = ehr_analysis_part4.Patient(
-    PatientID="B39DC5AC-E003-4E6A-91B6-FC07625A1285",
-    PATDB_location = "patient.db",
-    patfilename = "test_patient.txt"
-)
-
-lab_a = ehr_analysis_part4.Lab(
-    PatientID="1A8791E3-A61C-455A-8DEE-763EB90C9B2C",
-    PATDB_location = "lab.db",
-    patfilename = "test_lab.txt"
-)
-
-lab_b = ehr_analysis_part4.Lab(
-    PatientID="220C8D43-1322-4A9D-B890-D426942A3649",
-    PATDB_location = "lab.db",
-    patfilename = "test_lab.txt"
-)
-
-lab_c = ehr_analysis_part4.Lab(
-    PatientID="C242E3A4-E785-4DF1-A0E4-3B568DC88F2E",
-    PATDB_location = "lab.db",
-    patfilename = "test_lab.txt"
-)
-
-def test_num_older_than():
-    """Test function num_older_than."""
-    assert (
-        ehr_analysis_part4.num_older_than(age=100, patients=[patient_a, patient_b, patient_c])
-        == 0
-    )
-
-def test_sick_patients():
-    """Test function sick_patients."""
-    assert (
-        len(
-            ehr_analysis_part4.sick_patients(
-                lablist=[lab_a, lab_b, lab_c],
-                lab="CBC: ABSOLUTE LYMPHOCYTES",
-                gt_lt=">",
-                value=5.9,
-            )
-        )
-        == 0
-    )
+def test_sick_pats():
+    assert sick_patients('CBC: ABSOLUTE LYMPHOCYTES', '>', 100) == []
 
 def test_patient_age():
-    """Test function patient_age."""
-    assert (
-        ehr_analysis_part4.patient_age(
-            patients=[patient_a],
-            patient_id="FB2ABB23-C9D0-4D09-8464-49BF0B982F0F",
-        )
-        == 74.4
-    )
+    assert patient_age(PatientID='FB2ABB23-C9D0-4D09-8464-49BF0B982F0F') == [(74.4,)]
