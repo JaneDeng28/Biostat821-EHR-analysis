@@ -4,31 +4,15 @@ from ehr_part3 import Patient, Lab
 
 """Data Parsing"""
 
+def parse_patient(patfilename:List[str]) -> List[Patient]:
+	with open(patfilename) as patient_table:
+		return [line.replace('\n','').split('\t') for line in patient_table][1:]
 
-def parse_patient(patfilename: str) -> List[Patient]:
-    with open(patfilename, "r") as file:
-        rows = file.readlines()
-        lists = []
-    for row in rows:
-        row = row.strip()
-        row = row.split("\t")
-        lists.append(row)
-    return lists
-
-
-def parse_lab(labfilename: str) -> List[Lab]:
-    with open(labfilename, "r") as file:
-        rows = file.readlines()
-        lists = []
-    for row in rows:
-        row = row.strip()
-        row = row.split("\t")
-        lists.append(row)
-    return lists
-
+def parse_lab(labfilename:List[str]) -> List[Lab]:
+	with open(labfilename) as labs_table:
+		return [line.replace('\n','').split('\t') for line in labs_table][1:]
 
 """Functions"""
-
 
 def num_older_than(age: float, patients: List[str]) -> int:
     count = 0
@@ -38,7 +22,9 @@ def num_older_than(age: float, patients: List[str]) -> int:
     return count
 
 
-def sick_patients(lablist: List[str], lab: str, gt_lt: str, value: float) -> List[Lab]:
+def sick_patients(
+    lablist: List[str], lab: str, gt_lt: str, value: float
+) -> List[Lab]:
     patid = set()
     for i in range(1, len(lablist) - 1):
         if lablist[i].LabName == lab:
@@ -53,7 +39,7 @@ def sick_patients(lablist: List[str], lab: str, gt_lt: str, value: float) -> Lis
     return list(patid)
 
 
-def patient_age(patients: List[str], patient_id: List[str]) -> int:
+def patient_age(patients: List[str], patient_id: List[str]) -> float:
     """
     A function that computes the age at first admission of any given patient
     @param patients: input data
@@ -68,7 +54,11 @@ def patient_age(patients: List[str], patient_id: List[str]) -> int:
 
 
 if __name__ == "__main__ ":
-    patient_data = parse_patient("PatientCorePopulatedTable.txt")
+    patient_data = parse_patient(
+        "PatientCorePopulatedTable.txt"
+    )
     print(num_older_than(51.2, patient_data))
-    lab_data = parse_lab("LabsCorePopulatedTable.txt")
+    lab_data = parse_lab(
+        "LabsCorePopulatedTable.txt"
+    )
     print(sick_patients(lab_data, "METABOLIC: ALBUMIN", ">", 4.0))
