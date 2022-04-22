@@ -93,7 +93,58 @@ class Lab:
         for row in rows:
             print(row)
 
+    def execute(self, filename):
+        """execute a row of data to current cursor"""
+        return self.cursor.execute(filename)
+
+    @property
+    def PatientID(self):
+        PatientID = self.cursor.execute("SELECT PatientID FROM labs")
+        return PatientID
+
+    @property
+    def ADMID(self):
+        ADMID = self.cursor.execute("SELECT AdimissionID FROM labs")
+        return ADMID
+
+def num_older_than(age: int) -> int:
+    PatientID = Patient.cursor.execute("SELECT PatientID FROM patients WHERE date('now') - date(PatientDateOfBirth) >" + str(age))
+    return len(list(PatientID))
+
+def sick_patients(lbname: str, gt_lt: str, lbvalue: float) -> list:
+
+    if gt_lt == ">":
+        sick_pat = Lab.cursor.execute("SELECT PatientID FROM labs WHERE LabName = '" 
+        + lbname 
+        + "'AND LabValue >" 
+        + str(lbvalue))
+    elif gt_lt == "<":
+        Lab.cursor.execute("SELECT PatientID FROM labs WHERE LabName = '" 
+        + lbname 
+        + "'AND LabValue <" 
+        + str(lbvalue))
+        sick_pat = list(Lab.cursor.fetchall())
+    else:
+        raise ValueError("Please input vaild '<' or '>'")
+    return list(set(sick_pat))
+
+def patient_age(PatientID: List[str]) -> list[float]:
+    PatientID = PatientID
+    Lab.cursor.execute(
+        """ SELECT date(LabDateTime)-date(PatientDateOfBirth) FROM 
+        (SELECT * FROM labs 
+        LEFT JOIN patients ON labs.PatientID = patients.PatientID 
+        GROUP BY patients.PatientID) 
+        WHERE PatientID = '
+        """ 
+    + PatientID 
+    + "' AND AdmissionID =" 
+    + str(1))
+    return list(Lab.cursor.fetchall())
+
 
 if __name__ == "__main__":
     Patient("FB2ABB23-C9D0-4D09-8464-49BF0B982F0F")
     Lab("1A8791E3-A61C-455A-8DEE-763EB90C9B2C")
+
+
